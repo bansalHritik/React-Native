@@ -4,6 +4,7 @@ import Home from "./HomeComponent";
 import DishDetail from "./DishDetailComponent";
 import { View, Platform } from "react-native";
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+console.disableYellowBox = true;
 
 // a stack naviagtor with some initial configs
 // a navigator means from this activity where we can go
