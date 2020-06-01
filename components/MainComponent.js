@@ -4,8 +4,20 @@ import Home from "./HomeComponent";
 import About from "./AboutComponents";
 import Contact from "./ContactComponent";
 import DishDetail from "./DishDetailComponent";
-import { View, Platform,Image,StyleSheet,ScrollView } from "react-native";
-import { createStackNavigator, createDrawerNavigator,DrawerItems,SafeAreaView } from "react-navigation";
+import {
+  View,
+  Platform,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Text,
+} from "react-native";
+import {
+  createStackNavigator,
+  createDrawerNavigator,
+  DrawerItems,
+  SafeAreaView,
+} from "react-navigation";
 import { Icon } from "react-native-elements";
 console.disableYellowBox = true;
 
@@ -18,7 +30,6 @@ const MenuNavigator = createStackNavigator(
     Menu: {
       screen: Menu,
       navigationOptions: ({ navigation }) => ({
-        
         headerLeft: (
           <Icon
             name="menu"
@@ -115,7 +126,26 @@ const ContactNavigator = createStackNavigator(
     }),
   }
 );
-
+const CustomDrawerContentComponent = (props) => (
+  <ScrollView>
+    <SafeAreaView
+      style={styles.container}
+      forceInset={{ top: "always", horizontal: "never" }}
+    />
+    <View style={styles.drawerHeader}>
+      <View style={{ flex: 1 }}>
+        <Image
+          source={require("./images/logo.png")}
+          style={styles.drawerImage}
+        />
+      </View>
+      <View style={{ flex: 2 }}>
+        <Text style={styles.drawerHeaderText}>Ristorante Con Fusion</Text>
+      </View>
+    </View>
+    <DrawerItems {...props} />
+  </ScrollView>
+);
 const MainNavigator = createDrawerNavigator(
   {
     Home: {
@@ -124,11 +154,7 @@ const MainNavigator = createDrawerNavigator(
         title: "Home",
         drawerLabel: "Home",
         drawerIcon: ({ tintColor }) => (
-          <Icon 
-          name="home" 
-          type="font-awesome" 
-          size={24} 
-          color={tintColor} />
+          <Icon name="home" type="font-awesome" size={24} color={tintColor} />
         ),
       },
     },
@@ -175,6 +201,7 @@ const MainNavigator = createDrawerNavigator(
   },
   {
     drawerBackgroundColor: "#512D11",
+    contentComponent: CustomDrawerContentComponent,
   }
 );
 class Main extends Component {
@@ -193,4 +220,27 @@ class Main extends Component {
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  drawerHeader: {
+    backgroundColor: "#512DA8",
+    height: 140,
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    flexDirection: "row",
+  },
+  drawerHeaderText: {
+    color: "white",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  drawerImage: {
+    margin: 10,
+    height: 55,
+    width: 70,
+  },
+});
 export default Main;
