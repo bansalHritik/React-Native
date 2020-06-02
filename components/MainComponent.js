@@ -19,8 +19,30 @@ import {
   SafeAreaView,
 } from "react-navigation";
 import { Icon } from "react-native-elements";
+import {
+  fetchComments,
+  fetchDishes,
+  fetchLeaders,
+  fetchPromos,
+} from "../redux/ActionCreators";
+import { connect } from "react-redux";
 console.disableYellowBox = true;
 
+const mapStateToProps = (state) => {
+  return {
+    dishes:state.dishes,
+    comments:state.comments,
+    promotions:state.promotions,
+    leaders:state.leaders
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchDishes: () => dispatch(fetchDishes()),
+  fetchPromos: () => dispatch(fetchPromos()),
+  fetchLeaders: () => dispatch(fetchLeaders()),
+  fetchComments: () => dispatch(fetchComments()),
+});
 //navigation Option can be defined both as object or as function
 // a stack naviagtor with some initial configs
 // a navigator means from this activity where we can go
@@ -205,6 +227,12 @@ const MainNavigator = createDrawerNavigator(
   }
 );
 class Main extends Component {
+  componentDidMount() {
+    this.props.fetchComments();
+    this.props.fetchDishes();
+    this.props.fetchLeaders();
+    this.props.fetchPromos();
+  }
   render() {
     return (
       <View
@@ -243,4 +271,4 @@ const styles = StyleSheet.create({
     width: 70,
   },
 });
-export default Main;
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
