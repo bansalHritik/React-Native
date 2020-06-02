@@ -4,6 +4,7 @@ import Home from "./HomeComponent";
 import About from "./AboutComponents";
 import Contact from "./ContactComponent";
 import DishDetail from "./DishDetailComponent";
+import ReservationComponent from './ReservationComponent';
 import {
   View,
   Platform,
@@ -26,6 +27,7 @@ import {
   fetchPromos,
 } from "../redux/ActionCreators";
 import { connect } from "react-redux";
+import Reservation from "./ReservationComponent";
 console.disableYellowBox = true;
 
 const mapStateToProps = (state) => {
@@ -148,6 +150,29 @@ const ContactNavigator = createStackNavigator(
     }),
   }
 );
+const ReservationNavigator = createStackNavigator(
+  {
+    Reservation : Reservation // can be written as below
+  },
+  {
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: "#512D11", // color of header
+      },
+      headerTitleStyle: {
+        color: "#fff",
+      },
+      headerLeft: (
+        <Icon
+          name="menu"
+          size={24}
+          color="white"
+          onPress={() => navigation.toggleDrawer()}
+        />
+      ),
+    }),
+  }
+);
 const CustomDrawerContentComponent = (props) => (
   <ScrollView>
     <SafeAreaView
@@ -168,6 +193,8 @@ const CustomDrawerContentComponent = (props) => (
     <DrawerItems {...props} />
   </ScrollView>
 );
+
+
 const MainNavigator = createDrawerNavigator(
   {
     Home: {
@@ -213,6 +240,21 @@ const MainNavigator = createDrawerNavigator(
         drawerIcon: ({ tintColor }) => (
           <Icon
             name="address-card"
+            type="font-awesome"
+            size={24}
+            color={tintColor}
+          />
+        ),
+      },
+    },
+    Reservation: {
+      screen: ReservationNavigator,
+      navigationOptions: {
+        title: "Reservation ",
+        drawerLabel: "Reserve Us",
+        drawerIcon: ({ tintColor }) => (
+          <Icon
+            name="cutlery"
             type="font-awesome"
             size={24}
             color={tintColor}
