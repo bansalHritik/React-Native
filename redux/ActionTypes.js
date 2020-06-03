@@ -11,3 +11,4 @@ export const ADD_COMMENTS = "ADD_COMMENTS";
 export const COMMENTS_FAILED = "COMMENTS_FAILED";
 export const POST_FAVORITE = "POST_FAVORITE";
 export const ADD_FAVORITE = "ADD_FAVORITE";
+export const ADD_COMMENT = "ADD_COMMENT";
