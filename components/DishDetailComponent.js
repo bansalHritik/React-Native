@@ -7,6 +7,8 @@ import {
   Modal,
   Button,
   StyleSheet,
+  PanResponder,
+  Alert,
 } from "react-native";
 import { Card, Icon, Input, Rating, AirbnbRating } from "react-native-elements";
 import { baseUrl } from "../shared/baseUrl";
@@ -29,9 +31,69 @@ const mapDispatchToProps = (dispatch) => ({
 
 function RenderDish(props) {
   const dish = props.dish;
+
+  handleViewRef = (ref) => (this.view = ref);
+  const recognizeDragRightToLeft = ({ moveX, moveY, dx, dy }) => {
+    if (dx < -200) {
+      return true;
+    }
+    return false;
+  };
+  const recognizeComment = ({ moveX, moveY, dx, dy }) => {
+    if (dx < 200) {
+      return true;
+    }
+    return false;
+  };
+
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: (event, gestureState) => {
+      return true;
+    },
+    onPanResponderGrant: () => {
+      this.view
+        .pulse(1000)
+        .then((endState) =>
+          console.log(endState.finished ? "Finished" : "Cancelled")
+        );
+    },
+    onPanResponderEnd: (event, gestureState) => {
+      if (recognizeDragRightToLeft(gestureState)) {
+        Alert.alert(
+          "Add To Favorite ?",
+          "Are You sure you wish to add " + dish.name + " to favorite",
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancelled Pressed"),
+              style: "cancel",
+            },
+            {
+              text: "Ok",
+              onPress: () =>
+                props.favorite
+                  ? console.log("Already Favorite")
+                  : props.onPress(),
+              style: "cancel",
+            },
+          ],
+          { cancelable: false }
+        );
+      } else if (recognizeComment(gestureState)) {
+        props.toggleModal();
+      }
+      return true;
+    },
+  });
   if (dish != null) {
     return (
-      <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+      <Animatable.View
+        animation="fadeInDown"
+        duration={2000}
+        delay={1000}
+        ref={this.handleViewRef}
+        {...panResponder.panHandlers}
+      >
         <Card
           featuredTitle={dish.name}
           image={{ uri: baseUrl + dish.image }}
@@ -184,6 +246,7 @@ class DishDetail extends Component {
               showRating
               onFinishRating={(rating) => this.setRating(rating)}
               minValue={1}
+              startingValue={1}
             />
 
             <Input
