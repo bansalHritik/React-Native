@@ -4,7 +4,8 @@ import Home from "./HomeComponent";
 import About from "./AboutComponents";
 import Contact from "./ContactComponent";
 import DishDetail from "./DishDetailComponent";
-import ReservationComponent from './ReservationComponent';
+import Reservation from "./ReservationComponent";
+import Favorite from "./FavoriteComponent";
 import {
   View,
   Platform,
@@ -27,15 +28,14 @@ import {
   fetchPromos,
 } from "../redux/ActionCreators";
 import { connect } from "react-redux";
-import Reservation from "./ReservationComponent";
 console.disableYellowBox = true;
 
 const mapStateToProps = (state) => {
   return {
-    dishes:state.dishes,
-    comments:state.comments,
-    promotions:state.promotions,
-    leaders:state.leaders
+    dishes: state.dishes,
+    comments: state.comments,
+    promotions: state.promotions,
+    leaders: state.leaders,
   };
 };
 
@@ -152,7 +152,30 @@ const ContactNavigator = createStackNavigator(
 );
 const ReservationNavigator = createStackNavigator(
   {
-    Reservation : Reservation // can be written as below
+    Reservation: Reservation, // can be written as below
+  },
+  {
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: "#512D11", // color of header
+      },
+      headerTitleStyle: {
+        color: "#fff",
+      },
+      headerLeft: (
+        <Icon
+          name="menu"
+          size={24}
+          color="white"
+          onPress={() => navigation.toggleDrawer()}
+        />
+      ),
+    }),
+  }
+);
+const FavoriteNavigator = createStackNavigator(
+  {
+    Favorite: Favorite, // can be written as below
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -193,7 +216,6 @@ const CustomDrawerContentComponent = (props) => (
     <DrawerItems {...props} />
   </ScrollView>
 );
-
 
 const MainNavigator = createDrawerNavigator(
   {
@@ -259,6 +281,16 @@ const MainNavigator = createDrawerNavigator(
             size={24}
             color={tintColor}
           />
+        ),
+      },
+    },
+    Favorite: {
+      screen: FavoriteNavigator,
+      navigationOptions: {
+        title: "Favorite ",
+        drawerLabel: "Favorites",
+        drawerIcon: ({ tintColor }) => (
+          <Icon name="heart" type="font-awesome" size={24} color={tintColor} />
         ),
       },
     },
